@@ -6,12 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinePlus.Infra.Repos;
 
-public class RoomRepo : BaseRepo<Room>, IRoomRepo
+public class RoomRepo(IDataContext context) : BaseRepo<Room>(context), IRoomRepo
 {
-    public RoomRepo(IDataContext context) : base(context)
-    {
-    }
-
     public override async Task<IList<Room>> ListAsync()
         => await DbSet.OrderBy(movie => movie.Name).ToListAsync();
 

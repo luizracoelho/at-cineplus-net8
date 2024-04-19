@@ -6,12 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinePlus.Infra.Repos;
 
-public class SessionRepo : BaseRepo<Session>, ISessionRepo
+public class SessionRepo(IDataContext context)  : BaseRepo<Session>(context), ISessionRepo
 {
-    public SessionRepo(IDataContext context) : base(context)
-    {
-    }
-
     public async Task<IList<Session>> ListByMovieAndRoomAsync(long movieId, long roomId)
     {
         return await DbSet

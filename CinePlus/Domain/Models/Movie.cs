@@ -1,27 +1,15 @@
 namespace CinePlus.Domain.Models;
 
-public class Movie
+public class Movie(string name, string image, int durationInMinutes)
 {
     #region Properties
 
-    public long Id { get; private set; }
-    public string Name { get; private set; }
-    public string Image { get; private set; }
-    public int DurationInMinutes { get; private set; }
-    public bool Active { get; private set; }
-    public IList<Session> Sessions { get; private set; }
-
-    #endregion
-
-    #region Constructors
-
-    public Movie(string name, string image, int durationInMinutes)
-    {
-        Id = 0;
-        Active = true;
-        Sessions = new List<Session>();
-        Update(name, image, durationInMinutes);
-    }
+    public long Id { get; private set; } = 0;
+    public string Name { get; private set; } = name;
+    public string Image { get; private set; } = image;
+    public int DurationInMinutes { get; private set; } = durationInMinutes;
+    public bool Active { get; private set; } = true;
+    public IList<Session> Sessions { get; private set; } = [];
 
     #endregion
 

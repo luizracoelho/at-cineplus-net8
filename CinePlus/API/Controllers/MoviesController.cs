@@ -8,16 +8,12 @@ namespace CinePlus.API.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class MoviesController : ControllerBase
+public class MoviesController(IMovieApp app) : ControllerBase
 {
-    private readonly IMovieApp _app;
-
-    public MoviesController(IMovieApp app) => _app = app;
-
     [HttpGet]
     public async Task<IActionResult> ListAsync()
     {
-        var movies = await _app.ListAsync();
+        var movies = await app.ListAsync();
         return Ok(movies);
     }
 
@@ -26,7 +22,7 @@ public class MoviesController : ControllerBase
     {
         try
         {
-            var movies = await _app.ListActivesAsync();
+            var movies = await app.ListActivesAsync();
             return Ok(movies);
         }
         catch (NotFoundException e)
@@ -44,7 +40,7 @@ public class MoviesController : ControllerBase
     {
         try
         {
-            var movie = await _app.FindAsync(id);
+            var movie = await app.FindAsync(id);
             return Ok(movie);
         }
         catch (NotFoundException e)
@@ -62,7 +58,7 @@ public class MoviesController : ControllerBase
     {
         try
         {
-            var movie = await _app.AddAsync(vm);
+            var movie = await app.AddAsync(vm);
             return Ok(movie);
         }
         catch (NotFoundException e)
@@ -80,7 +76,7 @@ public class MoviesController : ControllerBase
     {
         try
         {
-            var movie = await _app.UpdateAsync(id, vm);
+            var movie = await app.UpdateAsync(id, vm);
             return Ok(movie);
         }
         catch (NotFoundException e)
@@ -98,7 +94,7 @@ public class MoviesController : ControllerBase
     {
         try
         {
-            var isSuccess = await _app.RemoveAsync(id);
+            var isSuccess = await app.RemoveAsync(id);
 
             if (!isSuccess)
                 return BadRequest();
@@ -120,7 +116,7 @@ public class MoviesController : ControllerBase
     {
         try
         {
-            var isSuccess = await _app.ActivateAsync(id);
+            var isSuccess = await app.ActivateAsync(id);
 
             if (!isSuccess)
                 return BadRequest();
@@ -142,7 +138,7 @@ public class MoviesController : ControllerBase
     {
         try
         {
-            var isSuccess = await _app.DeactivateAsync(id);
+            var isSuccess = await app.DeactivateAsync(id);
 
             if (!isSuccess)
                 return BadRequest();

@@ -8,18 +8,14 @@ namespace CinePlus.API.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class RoomsController : ControllerBase
+public class RoomsController(IRoomApp app) : ControllerBase
 {
-    private readonly IRoomApp _app;
-
-    public RoomsController(IRoomApp app) => _app = app;
-
     [HttpGet]
     public async Task<IActionResult> ListAsync()
     {
         try
         {
-            return Ok(await _app.ListAsync());
+            return Ok(await app.ListAsync());
         }
         catch (NotFoundException e)
         {
@@ -36,7 +32,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.ListActivesAsync());
+            return Ok(await app.ListActivesAsync());
         }
         catch (NotFoundException e)
         {
@@ -53,7 +49,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.FindAsync(id));
+            return Ok(await app.FindAsync(id));
         }
         catch (NotFoundException e)
         {
@@ -70,7 +66,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.AddAsync(vm));
+            return Ok(await app.AddAsync(vm));
         }
         catch (NotFoundException e)
         {
@@ -87,7 +83,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.UpdateAsync(id, vm));
+            return Ok(await app.UpdateAsync(id, vm));
         }
         catch (NotFoundException e)
         {
@@ -104,7 +100,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            var isSuccess = await _app.RemoveAsync(id);
+            var isSuccess = await app.RemoveAsync(id);
             return isSuccess ? Ok() : BadRequest();
         }
         catch (NotFoundException e)
@@ -122,7 +118,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            var isSuccess = await _app.ActivateAsync(id);
+            var isSuccess = await app.ActivateAsync(id);
             return isSuccess ? Ok() : BadRequest();
         }
         catch (NotFoundException e)
@@ -140,7 +136,7 @@ public class RoomsController : ControllerBase
     {
         try
         {
-            var isSuccess = await _app.DeactivateAsync(id);
+            var isSuccess = await app.DeactivateAsync(id);
             return isSuccess ? Ok() : BadRequest();
         }
         catch (NotFoundException e)

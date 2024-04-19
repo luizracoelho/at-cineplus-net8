@@ -9,18 +9,14 @@ namespace CinePlus.API.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class SessionsController : ControllerBase
+public class SessionsController(ISessionApp app) : ControllerBase
 {
-    private readonly ISessionApp _app;
-
-    public SessionsController(ISessionApp app) => _app = app;
-
     [HttpGet]
     public async Task<IActionResult> ListAsync()
     {
         try
         {
-            return Ok(await _app.ListAsync());
+            return Ok(await app.ListAsync());
         }
         catch (NotFoundException e)
         {
@@ -37,7 +33,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.ListByMovieAndRoomAsync(movieId, roomId));
+            return Ok(await app.ListByMovieAndRoomAsync(movieId, roomId));
         }
         catch (NotFoundException e)
         {
@@ -54,7 +50,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.FindAsync(id));
+            return Ok(await app.FindAsync(id));
         }
         catch (NotFoundException e)
         {
@@ -71,7 +67,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.AddAsync(vm));
+            return Ok(await app.AddAsync(vm));
         }
         catch (NotFoundException e)
         {
@@ -88,7 +84,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.UpdateAsync(id, vm));
+            return Ok(await app.UpdateAsync(id, vm));
         }
         catch (NotFoundException e)
         {
@@ -105,7 +101,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            var isSuccess = await _app.RemoveAsync(id);
+            var isSuccess = await app.RemoveAsync(id);
             return isSuccess ? Ok() : BadRequest();
         }
         catch (NotFoundException e)
@@ -123,7 +119,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.AddSeatAsync(sessionId, vm));
+            return Ok(await app.AddSeatAsync(sessionId, vm));
         }
         catch (NotFoundException e)
         {
@@ -140,7 +136,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.UpdateSeatAsync(sessionId, id, vm));
+            return Ok(await app.UpdateSeatAsync(sessionId, id, vm));
         }
         catch (NotFoundException e)
         {
@@ -157,7 +153,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.RemoveSeatAsync(sessionId, id));
+            return Ok(await app.RemoveSeatAsync(sessionId, id));
         }
         catch (NotFoundException e)
         {
@@ -174,7 +170,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.ReserveSeatAsync(sessionId, id, vm));
+            return Ok(await app.ReserveSeatAsync(sessionId, id, vm));
         }
         catch (NotFoundException e)
         {
@@ -191,7 +187,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.CancelReserveSeatAsync(sessionId, id));
+            return Ok(await app.CancelReserveSeatAsync(sessionId, id));
         }
         catch (NotFoundException e)
         {
@@ -208,7 +204,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.ConfirmReserveSeatAsync(sessionId, id));
+            return Ok(await app.ConfirmReserveSeatAsync(sessionId, id));
         }
         catch (NotFoundException e)
         {
@@ -225,7 +221,7 @@ public class SessionsController : ControllerBase
     {
         try
         {
-            return Ok(await _app.CancelConfirmationSeatAsync(sessionId, id));
+            return Ok(await app.CancelConfirmationSeatAsync(sessionId, id));
         }
         catch (NotFoundException e)
         {

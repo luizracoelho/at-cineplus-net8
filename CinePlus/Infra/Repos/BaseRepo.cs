@@ -5,16 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinePlus.Infra.Repos;
 
-public abstract class BaseRepo<T> : IBaseRepo<T> where T : class
+public abstract class BaseRepo<T>(IDataContext context) : IBaseRepo<T> where T : class
 {
-    private readonly IDataContext _context;
-    protected readonly DbSet<T> DbSet;
-
-    protected BaseRepo(IDataContext context)
-    {
-        _context = context;
-        DbSet = context.Set<T>();
-    }
+    protected readonly DbSet<T> DbSet = context.Set<T>();
 
     public virtual async Task<IList<T>> ListAsync()
         => await DbSet.ToListAsync();
@@ -25,7 +18,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T> where T : class
     public virtual async Task<T> AddAsync(T entity)
     {
         DbSet.Add(entity);
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
 
         return entity;
     }
@@ -33,7 +26,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T> where T : class
     public virtual async Task<T> UpdateAsync(T entity)
     {
         DbSet.Update(entity);
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
 
         return entity;
     }
@@ -41,7 +34,7 @@ public abstract class BaseRepo<T> : IBaseRepo<T> where T : class
     public virtual async Task<bool> RemoveAsync(T entity)
     {
         DbSet.Remove(entity);
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
 
         return true;
     }

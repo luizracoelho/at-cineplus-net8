@@ -6,24 +6,15 @@ using FluentValidation;
 
 namespace CinePlus.Domain.Services;
 
-public class MovieService : BaseService<Movie>, IMovieService
+public class MovieService(IMovieRepo repo, MovieValidator validator) : BaseService<Movie>(repo), IMovieService
 {
-    private readonly IMovieRepo _repo;
-    private readonly MovieValidator _validator;
-
-    public MovieService(IMovieRepo repo, MovieValidator validator) : base(repo)
-    {
-        _repo = repo;
-        _validator = validator;
-    }
-
     public async Task<IList<Movie>> ListActivesAsync()
-        => await _repo.ListActivesAsync();
+        => await repo.ListActivesAsync();
 
     public async Task<Movie> AddAsync(Movie movie)
     {
-        await _validator.ValidateAndThrowAsync(movie);
-        return await _repo.AddAsync(movie);
+        await validator.ValidateAndThrowAsync(movie);
+        return await repo.AddAsync(movie);
     }
 
     public async Task<Movie> UpdateAsync(Movie movie)
@@ -32,9 +23,9 @@ public class MovieService : BaseService<Movie>, IMovieService
 
         movieDb.Update(movie.Name, movie.Image, movie.DurationInMinutes);
 
-        await _validator.ValidateAndThrowAsync(movieDb);
+        await validator.ValidateAndThrowAsync(movieDb);
 
-        return await _repo.UpdateAsync(movieDb);
+        return await repo.UpdateAsync(movieDb);
     }
 
     public async Task<bool> ActivateAsync(long id)
@@ -44,7 +35,7 @@ public class MovieService : BaseService<Movie>, IMovieService
 
         if (!result) throw new Exception("Não foi possível ativar o filme, pois ele já se encontra ativo.");
 
-        await _repo.UpdateAsync(movieDb);
+        await repo.UpdateAsync(movieDb);
 
         return true;
     }
@@ -56,7 +47,7 @@ public class MovieService : BaseService<Movie>, IMovieService
 
         if (!result) throw new Exception("Não foi possível desativar o filme, pois ele já se encontra inativo.");
 
-        await _repo.UpdateAsync(movieDb);
+        await repo.UpdateAsync(movieDb);
 
         return true;
     }

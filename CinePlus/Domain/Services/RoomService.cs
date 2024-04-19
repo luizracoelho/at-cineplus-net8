@@ -6,24 +6,15 @@ using FluentValidation;
 
 namespace CinePlus.Domain.Services;
 
-public class RoomService : BaseService<Room>, IRoomService
+public class RoomService(IRoomRepo repo, RoomValidator validator) : BaseService<Room>(repo), IRoomService
 {
-    private readonly IRoomRepo _repo;
-    private readonly RoomValidator _validator;
-    
-    public RoomService(IRoomRepo repo, RoomValidator validator) : base(repo)
-    {
-        _repo = repo;
-        _validator = validator;
-    }
-
     public async Task<IList<Room>> ListActivesAsync() 
-        => await _repo.ListActivesAsync();
+        => await repo.ListActivesAsync();
 
     public async Task<Room> AddAsync(Room room)
     {
-        await _validator.ValidateAndThrowAsync(room);
-        return await _repo.AddAsync(room);
+        await validator.ValidateAndThrowAsync(room);
+        return await repo.AddAsync(room);
     }
 
     public async Task<Room> UpdateAsync(Room room)
@@ -32,9 +23,9 @@ public class RoomService : BaseService<Room>, IRoomService
 
         roomDb.Update(room.Name, room.RowsCount, room.SeatsByRow);
 
-        await _validator.ValidateAndThrowAsync(roomDb);
+        await validator.ValidateAndThrowAsync(roomDb);
 
-        return await _repo.UpdateAsync(roomDb);
+        return await repo.UpdateAsync(roomDb);
     }
     
     public async Task<bool> ActivateAsync(long id)
@@ -44,7 +35,7 @@ public class RoomService : BaseService<Room>, IRoomService
 
         if (!result) throw new Exception("Não foi possível ativar a sala, pois ela já se encontra ativa.");
 
-        await _repo.UpdateAsync(roomDb);
+        await repo.UpdateAsync(roomDb);
 
         return true;
     }
@@ -56,7 +47,7 @@ public class RoomService : BaseService<Room>, IRoomService
 
         if (!result) throw new Exception("Não foi possível desativar a sala, pois ela já se encontra inativa.");
 
-        await _repo.UpdateAsync(roomDb);
+        await repo.UpdateAsync(roomDb);
 
         return true;
     }

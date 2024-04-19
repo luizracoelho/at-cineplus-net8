@@ -7,21 +7,12 @@ using FluentValidation;
 
 namespace CinePlus.Domain.Services;
 
-public class SessionSeatService : BaseService<SessionSeat>, ISessionSeatService
+public class SessionSeatService(ISessionSeatRepo repo, SessionSeatValidator validator) : BaseService<SessionSeat>(repo), ISessionSeatService
 {
-    private readonly ISessionSeatRepo _repo;
-    private readonly SessionSeatValidator _validator;
-
-    public SessionSeatService(ISessionSeatRepo repo, SessionSeatValidator validator) : base(repo)
-    {
-        _repo = repo;
-        _validator = validator;
-    }
-
     public async Task<SessionSeat> AddAsync(SessionSeat seat)
     {
-        await _validator.ValidateAndThrowAsync(seat);
-        return await _repo.AddAsync(seat);
+        await validator.ValidateAndThrowAsync(seat);
+        return await repo.AddAsync(seat);
     }
 
     public async Task<SessionSeat> UpdateAsync(SessionSeat seat)
@@ -30,9 +21,9 @@ public class SessionSeatService : BaseService<SessionSeat>, ISessionSeatService
 
         seatDb.Update(seat.Seat);
 
-        await _validator.ValidateAndThrowAsync(seatDb);
+        await validator.ValidateAndThrowAsync(seatDb);
 
-        return await _repo.UpdateAsync(seatDb);
+        return await repo.UpdateAsync(seatDb);
     }
     
     public async Task<bool> ReserveAsync(long id, string documentId)
@@ -42,7 +33,7 @@ public class SessionSeatService : BaseService<SessionSeat>, ISessionSeatService
 
         if (!result) throw new Exception("Não foi possível reservar o assento, pois ele já se encontra reservado.");
 
-        await _repo.UpdateAsync(movieDb);
+        await repo.UpdateAsync(movieDb);
 
         return true;
     }
@@ -54,7 +45,7 @@ public class SessionSeatService : BaseService<SessionSeat>, ISessionSeatService
 
         if (!result) throw new Exception("Não foi possível cancelar a reserva, pois ele já se encontra cancelada.");
 
-        await _repo.UpdateAsync(movieDb);
+        await repo.UpdateAsync(movieDb);
 
         return true;
     }
@@ -66,7 +57,7 @@ public class SessionSeatService : BaseService<SessionSeat>, ISessionSeatService
 
         if (!result) throw new Exception("Não foi possível confirmar o assento, pois ele não se encontra reservado.");
 
-        await _repo.UpdateAsync(movieDb);
+        await repo.UpdateAsync(movieDb);
 
         return true;
     }
@@ -78,7 +69,7 @@ public class SessionSeatService : BaseService<SessionSeat>, ISessionSeatService
 
         if (!result) throw new Exception("Não foi possível cancelar a confirmação, pois ele já se encontra cancelada.");
 
-        await _repo.UpdateAsync(movieDb);
+        await repo.UpdateAsync(movieDb);
 
         return true;
     }

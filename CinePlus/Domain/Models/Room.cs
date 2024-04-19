@@ -1,27 +1,15 @@
 namespace CinePlus.Domain.Models;
 
-public class Room
+public class Room(string name, int rowsCount, int seatsByRow)
 {
     #region Properties
 
-    public long Id { get; private set; }
-    public string Name { get; private set; }
-    public int RowsCount { get; private set; }
-    public int SeatsByRow { get; private set; }
-    public bool Active { get; private set; }
-    public IList<Session> Sessions { get; private set; }
-
-    #endregion
-
-    #region Constructors
-
-    public Room(string name, int rowsCount, int seatsByRow)
-    {
-        Id = 0;
-        Active = true;
-        Sessions = new List<Session>();
-        Update(name, rowsCount, seatsByRow);
-    }
+    public long Id { get; private set; } = 0;
+    public string Name { get; private set; } = name;
+    public int RowsCount { get; private set; } = rowsCount;
+    public int SeatsByRow { get; private set; } = seatsByRow;
+    public bool Active { get; private set; } = true;
+    public IList<Session> Sessions { get; private set; } = [];
 
     #endregion
 

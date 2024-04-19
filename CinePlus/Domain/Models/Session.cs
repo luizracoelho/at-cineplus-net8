@@ -1,28 +1,17 @@
 namespace CinePlus.Domain.Models;
 
-public class Session
+public class Session(DateTime dateTime, long movieId, long roomId, decimal price)
 {
     #region Properties
 
-    public long Id { get; private set; }
-    public DateTime DateTime { get; private set; }
-    public long MovieId { get; private set; }
+    public long Id { get; private set; } = 0;
+    public DateTime DateTime { get; private set; } = dateTime;
+    public long MovieId { get; private set; } = movieId;
     public Movie? Movie { get; private set; }
-    public long RoomId { get; private set; }
+    public long RoomId { get; private set; } = roomId;
     public Room? Room { get; private set; }
-    public decimal Price { get; private set; }
-    public IList<SessionSeat> Seats { get; private set; }
-
-    #endregion
-    
-    #region Constructors
-
-    public Session(DateTime dateTime, long movieId, long roomId, decimal price)
-    {
-        Id = 0;
-        Seats = new List<SessionSeat>();
-        Update(dateTime, movieId, roomId, price);
-    }
+    public decimal Price { get; private set; } = price;
+    public IList<SessionSeat> Seats { get; private set; } = [];
 
     #endregion
     

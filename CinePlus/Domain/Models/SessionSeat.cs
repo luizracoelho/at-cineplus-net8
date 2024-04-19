@@ -2,28 +2,16 @@ using CinePlus.Domain.Enums;
 
 namespace CinePlus.Domain.Models;
 
-public class SessionSeat
+public class SessionSeat(string seat, long sessionId)
 {
     #region Properties
 
     public long Id { get; private set; }
-    public string Seat { get; private set; }
-    public SessionSeatStatus Status { get; private set; }
-    public long SessionId { get; private set; }
+    public string Seat { get; private set; } = seat;
+    public SessionSeatStatus Status { get; private set; } = SessionSeatStatus.Available;
+    public long SessionId { get; private set; } = sessionId;
     public Session? Session { get; private set; }
     public string? Document { get; private set; }
-
-    #endregion
-    
-    #region Constructors
-
-    public SessionSeat(string seat, long sessionId)
-    {
-        Id = 0;
-        SessionId = sessionId;
-        Status = SessionSeatStatus.Available;
-        Update(seat);
-    }
 
     #endregion
     

@@ -6,12 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CinePlus.Infra.Repos;
 
-public class SessionSeatRepo : BaseRepo<SessionSeat>, ISessionSeatRepo
+public class SessionSeatRepo(IDataContext context) : BaseRepo<SessionSeat>(context), ISessionSeatRepo
 {
-    public SessionSeatRepo(IDataContext context) : base(context)
-    {
-    }
-
     public override async Task<IList<SessionSeat>> ListAsync()
         => await DbSet.OrderBy(seat => seat.Session).ToListAsync();
 }
