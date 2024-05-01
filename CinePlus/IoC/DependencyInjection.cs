@@ -8,6 +8,7 @@ using CinePlus.Domain.Validators;
 using CinePlus.Infra.Context;
 using CinePlus.Infra.Repos;
 using CinePlus.IoC.Mappers;
+using CinePlus.Shared.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinePlus.IoC;
@@ -60,6 +61,10 @@ public static class DependencyInjection
         services.AddScoped<RoomValidator>();
         services.AddScoped<SessionValidator>();
         services.AddScoped<SessionSeatValidator>();
+        
+        // Global Exception Handler
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
 
         return services;
     }
