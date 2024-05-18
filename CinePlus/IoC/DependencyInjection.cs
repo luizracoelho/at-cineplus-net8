@@ -3,12 +3,14 @@ using CinePlus.Domain.Contracts.APP;
 using CinePlus.Domain.Contracts.Context;
 using CinePlus.Domain.Contracts.Repos;
 using CinePlus.Domain.Contracts.Services;
+using CinePlus.Domain.Models;
 using CinePlus.Domain.Services;
 using CinePlus.Domain.Validators;
 using CinePlus.Infra.Context;
 using CinePlus.Infra.Repos;
 using CinePlus.IoC.Mappers;
 using CinePlus.Shared.Middlewares;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinePlus.IoC;
@@ -39,6 +41,14 @@ public static class DependencyInjection
 
         services.AddScoped<IDataContext, DataContext>();
 
+        // Identity Server
+        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
+
         // Add Applications
         services.AddScoped<IMovieApp, MovieApp>();
         services.AddScoped<IRoomApp, RoomApp>();
@@ -61,7 +71,7 @@ public static class DependencyInjection
         services.AddScoped<RoomValidator>();
         services.AddScoped<SessionValidator>();
         services.AddScoped<SessionSeatValidator>();
-        
+
         // Global Exception Handler
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();

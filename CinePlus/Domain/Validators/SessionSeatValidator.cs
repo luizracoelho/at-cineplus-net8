@@ -17,12 +17,12 @@ public class SessionSeatValidator : AbstractValidator<SessionSeat>
             .GreaterThan(0)
             .WithMessage("O campo ID da sessão deve ser maior que zero.");
 
-        RuleFor(seat => seat.Document)
+        RuleFor(seat => seat.UserId)
             .NotEmpty()
             .When(seat => seat.Status != SessionSeatStatus.Available)
             .WithMessage("O campo documento é obrigatório após uma reserva ter sido realizada.");
 
-        RuleFor(seat => seat.Document)
+        RuleFor(seat => seat.UserId)
             .Null()
             .When(seat => seat.Status == SessionSeatStatus.Available)
             .WithMessage("O campo documento não pode ser preenchido em um assento disponível.");

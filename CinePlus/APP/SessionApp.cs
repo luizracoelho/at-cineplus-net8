@@ -75,7 +75,7 @@ public class SessionApp(ISessionService service, ISessionSeatService seatService
     public async Task<bool> ReserveSeatAsync(long sessionId, long id, ReserveSessionSeatVm vm)
     {
         await FindAndValidateSeatAsync(sessionId, id);
-        return await seatService.ReserveAsync(id, vm.Document);
+        return await seatService.ReserveAsync(id, vm.UserId);
     }
 
     public async Task<bool> CancelReserveSeatAsync(long sessionId, long id)

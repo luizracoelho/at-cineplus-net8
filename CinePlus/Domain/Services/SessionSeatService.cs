@@ -26,10 +26,10 @@ public class SessionSeatService(ISessionSeatRepo repo, SessionSeatValidator vali
         return await repo.UpdateAsync(seatDb);
     }
     
-    public async Task<bool> ReserveAsync(long id, string documentId)
+    public async Task<bool> ReserveAsync(long id, Guid userId)
     {
         var movieDb = await FindAsync(id);
-        var result = movieDb.Reserve(documentId);
+        var result = movieDb.Reserve(userId);
 
         if (!result) throw new Exception("Não foi possível reservar o assento, pois ele já se encontra reservado.");
 

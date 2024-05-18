@@ -11,7 +11,8 @@ public class SessionSeat(string seat, long sessionId)
     public SessionSeatStatus Status { get; private set; } = SessionSeatStatus.Available;
     public long SessionId { get; private set; } = sessionId;
     public Session? Session { get; private set; }
-    public string? Document { get; private set; }
+    public Guid? UserId { get; private set; }
+    public User? User { get; private set; }
 
     #endregion
     
@@ -19,11 +20,11 @@ public class SessionSeat(string seat, long sessionId)
 
     public void Update(string seat) => Seat = seat;
 
-    public bool Reserve(string document)
+    public bool Reserve(Guid userId)
     {
         if (Status != SessionSeatStatus.Available) return false;
 
-        Document = document;
+        UserId = userId;
         Status = SessionSeatStatus.Reserved;
         return true;
     }
@@ -32,7 +33,7 @@ public class SessionSeat(string seat, long sessionId)
     {
         if (Status != SessionSeatStatus.Reserved) return false;
 
-        Document = null;
+        UserId = null;
         Status = SessionSeatStatus.Available;
         return true;
     }
@@ -49,7 +50,7 @@ public class SessionSeat(string seat, long sessionId)
     {
         if (Status != SessionSeatStatus.Confirmed) return false;
 
-        Document = null;
+        UserId = null;
         Status = SessionSeatStatus.Available;
         return true;
     }

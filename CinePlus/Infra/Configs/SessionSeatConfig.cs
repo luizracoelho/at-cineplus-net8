@@ -14,5 +14,10 @@ public class SessionSeatConfig : IEntityTypeConfiguration<SessionSeat>
             .WithMany(session => session.Seats)
             .HasForeignKey(seat => seat.SessionId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(seat => seat.User)
+            .WithMany(user => user.Seats)
+            .HasForeignKey(seat => seat.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
